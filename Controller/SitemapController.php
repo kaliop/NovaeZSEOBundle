@@ -45,10 +45,15 @@ class SitemapController extends Controller
      */
     protected function getQuery()
     {
+        $languages = $this->getConfigResolver()->getParameter('languages');
+        $language = array_pop($languages);
         $locationService = $this->get( "ezpublish.api.repository" )->getLocationService();
         $excludes        = $this->getConfigResolver()->getParameter( 'sitemap_excludes', 'nova_ezseo' );
+
         $query           = new Query();
         $criterion[]     = new Criterion\Visibility( Criterion\Visibility::VISIBLE );
+        $criterion[]     = new Criterion\LanguageCode($language);
+
         foreach ( $excludes['contentTypeIdentifiers'] as $contentTypeIdentifier )
         {
             $criterion[] = new Criterion\LogicalNot( new Criterion\ContentTypeIdentifier( $contentTypeIdentifier ) );
@@ -65,6 +70,11 @@ class SitemapController extends Controller
         foreach ( $excludes['locations'] as $locationId )
         {
             $criterion[] = new Criterion\LogicalNot( new Criterion\LocationId( $locationId ) );
+        }
+
+        $rootLocation = $locationService->loadLocation($excludes['rootNodeId']);
+        if ($rootLocation instanceof Location) {
+            $criterion[]      = new Criterion\Subtree( $rootLocation->pathString);
         }
 
         $query->query = new Criterion\LogicalAnd( $criterion );
