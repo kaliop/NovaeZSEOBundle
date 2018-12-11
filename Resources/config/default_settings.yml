@@ -6,7 +6,6 @@ parameters:
     nova_ezseo.default.bing_verification: ~
     nova_ezseo.default.custom_fallback_service: ~
     nova_ezseo.default.sitemap_excludes:
-        rootNodeId: 2
         locations: []
         subtrees: []
         contentTypeIdentifiers: ['image']
