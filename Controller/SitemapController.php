@@ -47,7 +47,6 @@ class SitemapController extends Controller
     {
         $languages = $this->getConfigResolver()->getParameter('languages');
         $language = array_pop($languages);
-        $rootLocationId = $this->getConfigResolver()->getParameter('root_location_id');
         $locationService = $this->get( "ezpublish.api.repository" )->getLocationService();
         $excludes        = $this->getConfigResolver()->getParameter( 'sitemap_excludes', 'nova_ezseo' );
 
@@ -73,7 +72,7 @@ class SitemapController extends Controller
             $criterion[] = new Criterion\LogicalNot( new Criterion\LocationId( $locationId ) );
         }
 
-        $rootLocation = $locationService->loadLocation($rootLocationId);
+        $rootLocation = $locationService->loadLocation($excludes['rootNodeId']);
         if ($rootLocation instanceof Location) {
             $criterion[]      = new Criterion\Subtree( $rootLocation->pathString);
         }

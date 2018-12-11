@@ -51,6 +51,7 @@ class Configuration extends SiteAccessConfiguration
             ->end()
             ->arrayNode( 'sitemap_excludes' )
                 ->children()
+                    ->integerNode( 'rootNodeId' )->end()
                     ->arrayNode( 'locations' )
                         ->prototype( "variable" )->end()
                     ->end()
