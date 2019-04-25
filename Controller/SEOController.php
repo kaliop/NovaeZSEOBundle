@@ -48,9 +48,37 @@ class SEOController extends Controller
                 $robots[] = "Disallow: {$rule}";
             }
         }
+
+        $robots[] = $this->getSitemapUrl();
+
         $response->setContent( implode( "\n", $robots ) );
         $response->headers->set( "Content-Type", "text/plain" );
         return $response;
+    }
+
+    /**
+     * @return string
+     */
+    private function getUrlRobot()
+    {
+        $protocol = "http://";
+        if((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ||
+            (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === '1') ||
+            (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 1)
+        ) {
+            $protocol = "https://";
+        }
+
+        return $protocol.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+    }
+
+    /**
+     * @return string
+     */
+    private function getSitemapUrl()
+    {
+        $urlSitemap = str_replace('robots.txt', 'sitemap.xml', $this->getUrlRobot());
+        return "Sitemap: $urlSitemap";
     }
 
     /**
