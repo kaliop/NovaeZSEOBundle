@@ -1,6 +1,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+{% set metaIndex = content is defined and content.fields['meta_index'] is defined and ez_field_value(content, 'meta_index').bool is same as(true) %}
 {% for name, content in nova_ezseo.default_metas %}
-    {% if content is not empty %}
+    {% if name == 'robots' and app.environment == 'prod' and metaIndex %}
+        <meta name="{{ name }}" content="index,follow" />
+    {% elseif content is not empty %}
         <meta name="{{ name }}" content="{{ content }}"/>
     {% endif %}
 {% endfor %}
