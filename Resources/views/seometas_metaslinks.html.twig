@@ -1,8 +1,16 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-{% set metaIndex = content is defined and content.fields['meta_index'] is defined and ez_field_value(content, 'meta_index').bool is same as(true) %}
+{% set hasMetaNoIndexFlag = content is defined and content.fields['meta_no_index'] is defined %}
+{% if hasMetaNoIndexFlag %}
+    {% set robotsContent = ez_field_value(content, 'meta_no_index').bool is same as(true) ? 'noindex,nofollow' : 'index,follow' %}
+{% endif %}
+
+{% if app.environment == 'prod' and hasMetaNoIndexFlag and nova_ezseo.default_metas.robots is not defined %}
+    <meta name="robots" content="{{ robotsContent }}" />
+{% endif %}
+
 {% for name, content in nova_ezseo.default_metas %}
-    {% if name == 'robots' and app.environment == 'prod' and metaIndex %}
-        <meta name="{{ name }}" content="index,follow" />
+    {% if name == 'robots' and app.environment == 'prod' and hasMetaNoIndexFlag %}
+        <meta name="robots" content="{{ robotsContent }}" />
     {% elseif content is not empty %}
         <meta name="{{ name }}" content="{{ content }}"/>
     {% endif %}
