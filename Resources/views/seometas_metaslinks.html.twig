@@ -1,17 +1,21 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
 {% set hasMetaNoIndexFlag = content is defined and content.fields['meta_no_index'] is defined %}
-{% if hasMetaNoIndexFlag %}
+
+{% if app.environment == 'prod' and hasMetaNoIndexFlag %}
     {% set robotsContent = ez_field_value(content, 'meta_no_index').bool is same as(true) ? 'noindex,nofollow' : 'index,follow' %}
+{% elseif nova_ezseo.default_metas.robots is defined  %}
+    {% set robotsContent = nova_ezseo.default_metas.robots %}
+{% else %}
+    {% set robotsContent = null %}
 {% endif %}
 
-{% if app.environment == 'prod' and hasMetaNoIndexFlag and nova_ezseo.default_metas.robots is not defined %}
+{% if robotsContent is not empty %}
     <meta name="robots" content="{{ robotsContent }}" />
 {% endif %}
 
 {% for name, content in nova_ezseo.default_metas %}
-    {% if name == 'robots' and app.environment == 'prod' and hasMetaNoIndexFlag %}
-        <meta name="robots" content="{{ robotsContent }}" />
-    {% elseif content is not empty %}
+    {% if content is not empty and name != 'robots' %}
         <meta name="{{ name }}" content="{{ content }}"/>
     {% endif %}
 {% endfor %}
