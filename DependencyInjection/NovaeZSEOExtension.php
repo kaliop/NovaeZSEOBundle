@@ -111,5 +111,6 @@ class NovaeZSEOExtension extends Extension implements PrependExtensionInterface
         $processor->mapConfigArray( 'default_links', $config );
         $processor->mapConfigArray( 'sitemap_excludes', $config, ContextualizerInterface::MERGE_FROM_SECOND_LEVEL );
         $processor->mapConfigArray( 'robots_disallow', $config );
+        $processor->mapConfigArray('robots_user_agents', $config);
     }
 }

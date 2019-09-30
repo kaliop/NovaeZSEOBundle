@@ -1,5 +1,6 @@
 parameters:
     nova_ezseo.default.robots_disallow: []
+    nova_ezseo.default.robots_user_agents: []
     nova_ezseo.default.google_gatracker: ~
     nova_ezseo.default.google_verification: 1234567890
     nova_ezseo.default.google_anonymizeIp: ~
