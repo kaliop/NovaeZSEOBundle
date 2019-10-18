@@ -40,12 +40,26 @@ class SEOController extends Controller
         {
             $robots[] = "Disallow: /";
         }
+
         $rules = $this->getConfigResolver()->getParameter( 'robots_disallow', 'nova_ezseo' );
+        $userAgents = $this->getConfigResolver()->getParameter( 'robots_user_agents', 'nova_ezseo' );
+
         if ( is_array( $rules ) )
         {
             foreach ( $rules as $rule )
             {
                 $robots[] = "Disallow: {$rule}";
+            }
+        }
+
+        foreach ($userAgents as $agent => $agentConfig) {
+            if (!is_array($agentConfig['disallow']) || empty($agentConfig['disallow'])) {
+                $agentConfig['disallow'] = ['/'];
+            }
+
+            $robots[] = sprintf('User-agent: %s', $agent);
+            foreach ($agentConfig['disallow'] as $rule) {
+                $robots[] = sprintf('Disallow: %s', $rule);
             }
         }
 
