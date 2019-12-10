@@ -46,12 +46,21 @@
 
 {% if  ezpublish.availableLanguages|length > 1 %}
     {% for lang in ezpublish.availableLanguages %}
-        {% if location is defined and not location.isDraft %}
+        {% set href_lang = ezpublish.configResolver.parameter('href_lang', 'nova_ezseo', ezpublish.translationSiteAccess( lang )) %}
+        {% if href_lang is not empty and location is defined and not location.isDraft %}
+            <link rel="alternate" hreflang="{{ href_lang['href'] }}" href="{{ url( location, {"siteaccess": ezpublish.translationSiteAccess( lang ) } ) }}" />
+        {% elseif location is defined and not location.isDraft %}
             <link rel="alternate" data-sa="{{ ezpublish.translationSiteAccess( lang ) }}" hreflang="{{ lang|getposixlocale_novaseometas }}" href="{{ url( location, {"siteaccess": ezpublish.translationSiteAccess( lang ) } ) }}" />
         {% else %}
             {% set route = ez_route( params={"language": lang} ) %}
             {# we can't do the diff with 404 #}
-            <link rel="alternate" hreflang="{{ lang|getposixlocale_novaseometas }}" href="{{ url( route ) }}" />
+            {% if route is not empty %}
+                <link rel="alternate" hreflang="{{ lang|getposixlocale_novaseometas }}" href="{{ url( route ) }}" />
+            {% endif %}
         {% endif %}
     {% endfor %}
+    {% set href_lang = ezpublish.configResolver.parameter('href_lang', 'nova_ezseo') %}
+    {% if href_lang is not empty and href_lang['x_default'] == true %}
+        <link rel="alternate" hreflang="x-default" href="{{ url( ezpublish.rootLocation ) }}" />
+    {% endif %}
 {% endif %}

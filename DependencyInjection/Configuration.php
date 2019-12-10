@@ -93,6 +93,13 @@ class Configuration extends SiteAccessConfiguration
                     ->end()
                 ->end()
             ->end()
+            ->arrayNode( 'href_lang' )
+                ->children()
+                    ->scalarNode( 'language' )->end()
+                    ->scalarNode( 'href' )->end()
+                    ->scalarNode( 'x_default' )->end()
+                ->end()
+            ->end()
             ->end();
         return $treeBuilder;
     }
