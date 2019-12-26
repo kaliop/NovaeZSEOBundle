@@ -32,7 +32,11 @@
         {% endif %}
     {% endfor %}
     {% if contentInfo.mainLocationId is defined and contentInfo.mainLocationId is not null and isCanonicalFind == false %}
-        <link rel="canonical" href="{{ url( 'ez_urlalias', {'locationId': contentInfo.mainLocationId} ) }}" />
+      {% set url = url( 'ez_urlalias', {'locationId': contentInfo.mainLocationId}) %}
+      {% if app.request.attributes.all['viewParametersString'] is defined %}
+        {% set url = url ~ app.request.attributes.all['viewParametersString'] %}
+      {% endif %}
+        <link rel="canonical" href="{{ url }}" />
     {% endif %}
     {% if isTtitleFind == false %}
         <title>{{ ez_content_name( contentInfo ) }}</title>
