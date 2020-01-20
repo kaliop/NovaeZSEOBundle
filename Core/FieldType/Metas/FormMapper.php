@@ -87,6 +87,19 @@ class FormMapper implements FieldDefinitionFormMapperInterface, FieldValueFormMa
                 $data->value->metas[$key] = new Meta($key, '');
             }
         }
+        //this code able to add to the draft the "open graph" missing.
+        foreach ($metasConfig as $key => $arrayValue) {
+            if(!isset($data->value->metas[$key])) {
+                $data->value->metas[$key] = new Meta($key, '');
+            }
+        }
+
+        // this code able to delete the meta which have already add by a previous configuration yml
+        foreach ($data->value->metas as $key => $arrayValue) {
+            if(!isset($metasConfig[$key])) {
+                unset($data->value->metas[$key]);
+            }
+        }
 
         $fieldForm
             ->add(
