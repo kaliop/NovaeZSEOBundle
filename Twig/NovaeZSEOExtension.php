@@ -147,7 +147,7 @@ class NovaeZSEOExtension extends \Twig_Extension implements \Twig_Extension_Glob
         try {
             $location = $this->eZRepository->getLocationService()->loadLocation($locationId);
             return $this->router->generate($location);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return "";
         }
     }
