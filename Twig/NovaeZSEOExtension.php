@@ -22,6 +22,7 @@ use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter;
 use Novactive\Bundle\eZSEOBundle\Core\CustomFallbackInterface;
 use Twig\TwigFunction;
+use Symfony\Cmf\Component\Routing\ChainRouterInterface;
 
 
 /**
@@ -66,24 +67,30 @@ class NovaeZSEOExtension extends \Twig_Extension implements \Twig_Extension_Glob
     protected $customFallBackService;
 
     /**
-     * Constructor
-     *
-     * @param Repository              $repository
-     * @param MetaNameSchema          $nameSchema
+     * @var ChainRouterInterface
+     */
+    protected $router;
+
+    /**
+     * NovaeZSEOExtension constructor.
+     * @param Repository $repository
+     * @param MetaNameSchema $nameSchema
      * @param ConfigResolverInterface $configResolver
-     * @param LocaleConverter         $localeConverter
+     * @param LocaleConverter $localeConverter
+     * @param ChainRouterInterface $router
      */
     public function __construct(
         Repository $repository,
         MetaNameSchema $nameSchema,
         ConfigResolverInterface $configResolver,
-        LocaleConverter $localeConverter
-    )
-    {
+        LocaleConverter $localeConverter,
+        ChainRouterInterface $router
+    ) {
         $this->metaNameSchema  = $nameSchema;
         $this->eZRepository    = $repository;
         $this->configResolver  = $configResolver;
         $this->localeConverter = $localeConverter;
+        $this->router = $router;
     }
 
     /**
