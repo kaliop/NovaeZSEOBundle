@@ -34,7 +34,7 @@
     {% if attrs.href is not empty %}
         {% set href = attrs.href %}
         {% if href.location_id is defined %}
-            {% set href = path( 'ez_urlalias', {'locationId': href.location_id } ) %}
+          {% set href = get_location_href(href.location_id) %}
         {% elseif href.route is defined %}
             {% set href = path( href.route ) %}
         {% elseif href.asset is defined %}

@@ -18,6 +18,7 @@ services:
             - "@novactive.novaseobundle.meta_name_schema"
             - "@ezpublish.config.resolver"
             - "@ezpublish.locale.converter"
+            - "@router"
         public: false
         tags:
             - { name: twig.extension }

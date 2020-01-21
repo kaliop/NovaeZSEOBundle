@@ -21,6 +21,9 @@ use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Field;
 use eZ\Publish\Core\MVC\Symfony\Locale\LocaleConverter;
 use Novactive\Bundle\eZSEOBundle\Core\CustomFallbackInterface;
+use Twig\TwigFunction;
+
+
 /**
  * Class NovaeZSEOExtension
  */
@@ -115,6 +118,31 @@ class NovaeZSEOExtension extends \Twig_Extension implements \Twig_Extension_Glob
     public function getPosixLocale( $eZLocale )
     {
         return $this->localeConverter->convertToPOSIX( $eZLocale );
+    }
+
+    /**
+     * @return array
+     */
+    public function getFunctions()
+    {
+        return [
+            new TwigFunction('get_location_href', [$this, 'getLocationHref']),
+        ];
+    }
+
+    /**
+     * @param $locationId
+     *
+     * @return string
+     */
+    public function getLocationHref($locationId)
+    {
+        try {
+            $location = $this->eZRepository->getLocationService()->loadLocation($locationId);
+            return $this->router->generate($location);
+        } catch (Exception $e) {
+            return "";
+        }
     }
 
     /**
